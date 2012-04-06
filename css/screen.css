@@ -1,0 +1,226 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+}
+ol, ul {
+    list-style: none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+
+body
+{
+    background: rgb(20, 20, 20);
+    color: white;
+    font-family: arial, helvetica, sans-serif;
+}
+
+.TestLab
+{
+    padding-top: 100px;
+}
+
+.TestLab h1
+{
+    font-weight: bolder;
+    font-size: 1.2em;
+    padding: 15px;
+    padding-right: 35px;
+    margin-bottom: 50px;
+    background: rgb(10, 10, 10);
+    background: rgba(10, 10, 10, 0.8);
+    border-bottom: 1px solid rgb(40, 40, 40);
+    box-shadow: 0 5px 10px rgb(10, 10, 10);
+    text-align: right;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.TestLab h1 .RocketScience
+{
+/*     font-size: 0.8em; */
+    color: rgb(180, 180, 255);
+    margin-right: 20px;
+    margin-left: 20px;
+    float: left;
+}
+
+.TestSuite, .TestLab .results
+{
+    margin: auto;
+    margin-top: 0;
+    margin-bottom: 30px;
+    overflow: hidden;
+    max-width: 800px;
+}
+
+.TestSuite
+{
+    border: 1px solid rgb(40, 40, 40);
+    box-shadow: 5px 5px 5px rgb(10, 10, 10);
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.TestSuite h2
+{
+    font-weight: bolder;
+    font-size: 1em;
+    padding: 10px;
+    color: rgb(180, 180, 255);
+}
+
+.TestSuite ul
+{
+    padding: 15px;
+    background: rgb(50, 50, 50);
+}
+
+.TestSuite li
+{
+    background: rgb(60, 60, 60);
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 0.8em;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    font-weight: bolder;
+    box-shadow: 2px 2px 5px rgb(20, 20, 20);
+}
+
+.TestSuite li:last-child
+{
+    margin-bottom: 0;
+}
+
+.TestSuite li .details
+{
+    display: block;
+    font-size: 0.9em;
+    margin-top: 10px;
+    font-weight: normal;
+}
+
+.TestSuite li .tag
+{
+    float: right;
+    font-weight: bolder;
+/*     background: rgb(30, 30, 30); */
+    padding: 5px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    margin-top: -5px;
+    margin-right: -5px;
+    text-shadow: 0 0 2px rgb(10, 10, 10);
+}
+
+.TestSuite li .success, .TestSuite .results .success, .TestLabResults .success
+{
+    color: green;
+}
+
+.TestSuite .results .error, .TestLabResults .error
+{
+    color: red;
+}
+
+.TestSuite .results .failure, .TestLabResults .failure
+{
+    color: red;
+}
+
+.TestSuite .results
+{
+    background: rgb(40, 40, 40);
+    padding: 10px;
+    text-align: right;
+    font-size: 0.8em;
+    font-weight: bolder;
+    /*
+    border-radius: 0;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;*/
+    margin-bottom: 0;
+}
+/*
+.TestSuite .success
+{
+    background: rgb(80, 120, 80);
+}*/
+
+.TestSuite .failure, .TestSuite .error
+{
+    background: rgb(200, 80, 80);
+}
+
+.TestSuite .results span
+{
+    float: left;
+    background: inherit;
+}
+
+
+.TestLabResults
+{
+    background: rgb(40, 40, 40);
+    padding: 20px;
+    font-size: 1.4em;
+    font-weight: bolder;
+    max-width: 760px;
+    margin: auto;
+    margin-bottom: 50px;
+    margin-top: 50px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 15px black;
+    text-align: right;
+    text-shadow: 2px 2px 2px rgb(30, 30, 30);
+}
+
+.TestLabResults .tag
+{
+    float: left;
+}
+
