@@ -53,6 +53,7 @@ body
 .TestLab
 {
     padding-top: 100px;
+    padding-bottom: 100px;
 }
 
 .TestLab h1
@@ -98,6 +99,16 @@ body
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
+}
+
+.TestSuiteSuccess, .TestLabSuccess h1, .TestLabSuccess .TestLabResults
+{
+    box-shadow: 0 0 30px rgb(10, 60, 10);
+}
+
+.TestSuiteFailure, .TestLabFailure h1, .TestLabFailure .TestLabResults
+{
+    box-shadow: 0 0 30px rgb(100, 10, 10);
 }
 
 .TestSuite h2
@@ -154,22 +165,22 @@ body
     text-shadow: 0 0 2px rgb(10, 10, 10);
 }
 
-.TestSuite li .success, .TestSuite .results .success, .TestLabResults .success
+.TestSuite li .success, .TestSuiteResults .success, .TestLabResults .success
 {
     color: green;
 }
 
-.TestSuite .results .error, .TestLabResults .error
+.TestSuiteResults .error, .TestLabResults .error
 {
     color: red;
 }
 
-.TestSuite .results .failure, .TestLabResults .failure
+.TestSuiteResults .failure, .TestLabResults .failure
 {
     color: red;
 }
 
-.TestSuite .results
+.TestSuiteResults
 {
     background: rgb(40, 40, 40);
     padding: 10px;
@@ -193,23 +204,24 @@ body
     background: rgb(200, 80, 80);
 }
 
-.TestSuite .results span
+.TestSuiteResultOverview
 {
-    float: left;
-    background: inherit;
+    float: left !important;
+    background: none !important;
 }
 
 
 .TestLabResults
 {
-    background: rgb(40, 40, 40);
+    background: rgb(10, 10, 10);
+    background: rgba(10, 10, 10, 0.8);
     padding: 20px;
     font-size: 1.4em;
     font-weight: bolder;
     max-width: 760px;
     margin: auto;
     margin-bottom: 50px;
-    margin-top: 50px;
+/*     margin-top: 50px; */
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     -o-border-radius: 5px;
@@ -217,6 +229,7 @@ body
     box-shadow: 2px 2px 15px black;
     text-align: right;
     text-shadow: 2px 2px 2px rgb(30, 30, 30);
+    border: 1px solid rgb(40, 40, 40);
 }
 
 .TestLabResults .tag
