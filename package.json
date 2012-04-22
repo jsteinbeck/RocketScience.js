@@ -1,0 +1,7 @@
+{
+    "name": "rocketscience",
+    "main": "RocketScience.js",
+    "description": "Asynchronous JavaScript testing framework.",
+    "author": "Jonathan Steinbeck <jonathan@steinbeck.in>",
+    "version": "12.4.0"
+}

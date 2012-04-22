@@ -5,8 +5,16 @@
         <link rel="stylesheet" type="text/css" href="../css/screen.css" />
     </head>
     <body>
-        <script src="../../Squiddle.js/Squiddle.js"></script>
+        <script src="../libs/Squiddle.js/Squiddle.js"></script>
         <script src="../RocketScience.js"></script>
         <script src="Squiddle.js.test.js"></script>
+        <script>
+            var monitor, consoleMonitor;
+            monitor = new ROCKET.monitors.HTML();
+            monitor.switchOn();
+            consoleMonitor = new ROCKET.monitors.Console();
+            consoleMonitor.switchOn();
+            squiddleTest.run();
+        </script>
     </body>
 </html>
