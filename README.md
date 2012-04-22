@@ -1,6 +1,7 @@
 # RocketScience.js #
 
 RocketScience is an event-driven, asynchronous testing framework for JavaScript.
+It works in both browser environments and on the server (node.js).
 
 
 ## Concepts ##
@@ -41,11 +42,15 @@ where you extracted the archive and running:
 
 Then in node files, you can do:
 
+```javascript
     var ROCKET = require("rocketscience");
+```
 
 Or you can skip the install and use it like this:
 
+```javascript
     var ROCKET = require("./path/to/RocketScience.js/RocketScience.js");
+```
 
 
 ### Test the install ###
@@ -66,43 +71,53 @@ To test in node, open up a console and type:
 
 A simple test case could look like this:
 
-    var test = new ROCKET.TestCase(
-        "My first test case.",
-        function( params ) // The main testing function.
-        {
-            params.value = false;
-        },
-        function( params ) // The checker function.
-        {
-            this.assertEquals( params.value, true, "Hey, params.value should be true!" );
-        },
-        {
-            init: function() { return { value: true }; }, // Reset/Create the params object
-            wait: 20 // Wait 20 milliseconds before performing the check
-        }
-    );
+```javascript
+var test = new ROCKET.TestCase(
+    "My first test case.",
+    function( params ) // The main testing function.
+    {
+        params.value = false;
+    },
+    function( params ) // The checker function.
+    {
+        this.assertEquals( params.value, true, "Hey, params.value should be true!" );
+    },
+    {
+        init: function() { return { value: true }; }, // Reset/Create the params object
+        wait: 20 // Wait 20 milliseconds before performing the check
+    }
+);
+```
 
 Now that we have a test, we need to add it to a suite:
 
-    var suite = new ROCKET.TestSuite( "My first test suite." );
-    suite.addTestCase( test );
+```javascript
+var suite = new ROCKET.TestSuite( "My first test suite." );
+suite.addTestCase( test );
+```
 
 And then we create a new test lab to add the suite to:
 
-    var lab = new ROCKET.TestLab( "My first test lab." );
-    lab.addTestSuite( suite );
+```javascript
+var lab = new ROCKET.TestLab( "My first test lab." );
+lab.addTestSuite( suite );
+```
 
 We could now exercise our test by running the lab. But it wouldn't show the results.
 What we need is to create a monitor and switch it on. For this example, we are
 going to use the Console monitor, as it works on both browsers and on node:
 
-    var monitor = new ROCKET.monitors.Console();
-    monitor.switchOn();
+```javascript
+var monitor = new ROCKET.monitors.Console();
+monitor.switchOn();
+```
 
 That's it, we are now prepared to run our tests. To do that, we simply need to
 call the run method on our lab:
 
-    lab.run();
+```javascript
+lab.run();
+```
 
 __Best practice__: Write your test files in a way so that they can be run on both 
 server-side and client-side environments. To do that, you should only prepare
@@ -112,35 +127,35 @@ in which you set up the HTML monitor and run the lab. You can just copy one
 of the existing tests and modify it:
 
 ```html
-    <!doctype html>
-    <html>
-        <head>
-            <title>RocketScience.js</title>
-            <link rel="stylesheet" type="text/css" href="../css/screen.css" />
-        </head>
-        <body>
-    
-            <!-- Load Squiddle.js. RocketScience depends on it. It's part of the package. -->
-            <script src="../libs/Squiddle.js/Squiddle.js"></script>
-    
-            <!-- Load the RocketScience.js library file -->
-            <script src="../RocketScience.js"></script>
-    
-            <!-- Change the src to the URL where your test resides: -->
-            <script src="MyTest.test.js"></script>
-    
-            <script>
-                // Set up the monitors you wish to use:
-                var monitor, consoleMonitor; 
-                monitor = new ROCKET.monitors.HTML();
-                monitor.switchOn();
-                consoleMonitor = new ROCKET.monitors.Console();
-                consoleMonitor.switchOn();
-                // Run the test. Change this to what ever you called the lab:
-                test.run();
-            </script>
-        </body>
-    </html>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>RocketScience.js</title>
+        <link rel="stylesheet" type="text/css" href="../css/screen.css" />
+    </head>
+    <body>
+
+        <!-- Load Squiddle.js. RocketScience depends on it. It's part of the package. -->
+        <script src="../libs/Squiddle.js/Squiddle.js"></script>
+
+        <!-- Load the RocketScience.js library file -->
+        <script src="../RocketScience.js"></script>
+
+        <!-- Change the src to the URL where your test resides: -->
+        <script src="MyTest.test.js"></script>
+
+        <script>
+            // Set up the monitors you wish to use:
+            var monitor, consoleMonitor; 
+            monitor = new ROCKET.monitors.HTML();
+            monitor.switchOn();
+            consoleMonitor = new ROCKET.monitors.Console();
+            consoleMonitor.switchOn();
+            // Run the test. Change this to what ever you called the lab:
+            test.run();
+        </script>
+    </body>
+</html>
 ```
 
 For node, you would import your test file as a module, create a Console monitor
@@ -166,26 +181,28 @@ accordingly.
 
 And finally, this is what a test looks like that works on both node and the browser:
 
-    var test = ( function( exports )
-    {
-        // Define the vars for your lab, suites and cases:
-        var lab, suite, case;
+```javascript
+var test = ( function( exports )
+{
+    // Define the vars for your lab, suites and cases:
+    var lab, suite, case;
 
-        exports = exports || {}; // If not on node, just mock the exports object.
+    exports = exports || {}; // If not on node, just mock the exports object.
 
-        // ... Create your test case(s), suite(s) and lab here.
+    // ... Create your test case(s), suite(s) and lab here.
 
-        // Add your cases to their suites and your suites to the lab:
-        suite.addTestCase( case );
-        lab.addTestSuite( suite );
+    // Add your cases to their suites and your suites to the lab:
+    suite.addTestCase( case );
+    lab.addTestSuite( suite );
         
-        exports.lab = lab; // Export your lab for node.
+    exports.lab = lab; // Export your lab for node.
         
-        return lab; // Return the lab (for browsers).
+    return lab; // Return the lab (for browsers).
 
-    }(
-        (typeof exports === "undefined") ? false : exports
-    ));
+}(
+    (typeof exports === "undefined") ? false : exports
+));
+```
 
 
 ## Documentation ##
