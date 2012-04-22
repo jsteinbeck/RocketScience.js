@@ -45,13 +45,13 @@ where you extracted the archive and running:
 Then in node files, you can do:
 
 ```javascript
-    var ROCKET = require("rocketscience");
+var ROCKET = require("rocketscience");
 ```
 
 Or you can skip the install and use it like this:
 
 ```javascript
-    var ROCKET = require("./path/to/RocketScience.js/RocketScience.js");
+var ROCKET = require("./path/to/RocketScience.js/RocketScience.js");
 ```
 
 
