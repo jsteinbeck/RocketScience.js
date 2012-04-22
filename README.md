@@ -111,6 +111,7 @@ of the environments. In case of the browser this would be an HTML file
 in which you set up the HTML monitor and run the lab. You can just copy one
 of the existing tests and modify it:
 
+```html
     <!doctype html>
     <html>
         <head>
@@ -140,20 +141,23 @@ of the existing tests and modify it:
             </script>
         </body>
     </html>
+```
 
 For node, you would import your test file as a module, create a Console monitor
 and then run the lab, e.g. like:
 
-    var ROCKET, test, monitor;
-    
-    ROCKET = require("../RocketScience.js/RocketScience.js"); // Load RocketScience
-    test = require("../RocketScience.js/tests/Squiddle.js.test.js"); // Load the test
-    
-    // Set up the Console monitor:
-    monitor = new ROCKET.monitors.Console();
-    monitor.switchOn();
-    
-    test.lab.run(); // Run the exported lab.
+```javascript
+var ROCKET, test, monitor;
+
+ROCKET = require("../RocketScience.js"); // Load RocketScience
+test = require("./Squiddle.js.test.js"); // Load the test
+
+// Set up the Console monitor:
+monitor = new ROCKET.monitors.Console();
+monitor.switchOn();
+
+test.lab.run(); // Run the exported lab.
+```
 
 
 Note: For both examples we assumed that you put your tests inside the "tests" directory
