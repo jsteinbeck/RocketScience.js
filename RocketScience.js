@@ -39,6 +39,7 @@ var ROCKET = ( function( console, exports, Squiddle )
 
     RS.AssertionError = function(message) 
     {
+        message = message || "";
         this.message = message;
     };
     RS.AssertionError.prototype = new Error();
