@@ -3,6 +3,8 @@
 RocketScience is an event-driven, asynchronous testing framework for JavaScript.
 It works in both browser environments and on the server (node.js).
 
+![RocketScience.js in the browser](http://img.steinbeck.in/rocketscience.js-in-the-browser.jpg)
+
 
 ## Concepts ##
 
@@ -206,6 +208,12 @@ var test = ( function( exports )
 
 
 ## Documentation ##
+
+
+![RocketScience.js in the browser](http://img.steinbeck.in/rocketscience.js-structure.jpg "RocketScience.js structure")
+
+![RocketScience.js events](http://img.steinbeck.in/rocketscience.js-events.jpg "RocketScience.js events")
+
 
 ### [Constructor] ROCKET.TestCase ###
 
