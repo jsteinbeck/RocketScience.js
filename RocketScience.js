@@ -1,5 +1,7 @@
 var ROCKET = ( function( console, exports, Squiddle )
 {
+    "use strict";
+    
     var RS, key;
     
     console = console || { log: function() {} };
@@ -33,7 +35,7 @@ var ROCKET = ( function( console, exports, Squiddle )
         p2 = 255 * Math.random();
         p3 = 255 * Math.random();
         RS.highestId += 1;
-        out = RS.highestId + parseInt(p1 * p2 * p3);
+        out = RS.highestId + parseInt(p1 * p2 * p3, 10);
         return out;
     };
 
@@ -72,11 +74,7 @@ var ROCKET = ( function( console, exports, Squiddle )
     {
         message = message + " Found: " + value || 
             "Expected value to be truthy but found: " + value;
-        if (value)
-        {
-            // ...
-        }
-        else
+        if (!value)
         {
             throw new RS.AssertionError(message);
         }
@@ -121,7 +119,7 @@ var ROCKET = ( function( console, exports, Squiddle )
             results = [],
             key,
             self = this,
-            ret, handle;
+            ret, handle, fn;
         handle = setInterval(
             function()
             {
@@ -135,130 +133,129 @@ var ROCKET = ( function( console, exports, Squiddle )
             },
             20
         );
-        for (i = 0; i < len; ++i)
-        {
-            (
-                function() 
-                { 
-                    var test = cases[i];
-                    var params = test.init();
-                    try
+        fn = function(i) 
+        { 
+            var test = cases[i];
+            var params = test.init();
+            try
+            {
+                test.run(params);
+                setTimeout(
+                    function()
                     {
-                        test.run(params);
-                        setTimeout(
-                            function()
+                        try
+                        {
+                            test.checker(params);
+                        }
+                        catch (e)
+                        {
+                            if (e instanceof RS.AssertionError)
                             {
-                                try
-                                {
-                                    test.checker(params);
-                                }
-                                catch (e)
-                                {
-                                    if (e instanceof RS.AssertionError)
-                                    {
-                                        RS.bus.trigger(
-                                            "ROCKET.TestSuite.run.result.failure", 
-                                            {
-                                                suite: self,
-                                                case: test,
-                                                error: e
-                                            }
-                                        );
-                                        self.failures += 1;
-                                        self.results.push({
-                                            case: test,
-                                            result: "failure",
-                                            error: e
-                                        });
-                                    }
-                                    else
-                                    {
-                                        RS.bus.trigger(
-                                            "ROCKET.TestSuite.run.result.error", 
-                                            {
-                                                suite: self,
-                                                case: test,
-                                                error: e
-                                            }
-                                        );
-                                        self.errors += 1;
-                                        self.results.push({
-                                            case: test,
-                                            result: "error",
-                                            error: e
-                                        });
-                                    }
-                                    return;
-                                }
                                 RS.bus.trigger(
-                                    "ROCKET.TestSuite.run.result.success", 
+                                    "ROCKET.TestSuite.run.result.failure", 
                                     {
-                                        suite: self,
-                                        case: test
+                                        testSuite: self,
+                                        testCase: test,
+                                        error: e
                                     }
                                 );
-                                self.successes += 1;
+                                self.failures += 1;
                                 self.results.push({
-                                    case: test,
-                                    result: "success"
+                                    testCase: test,
+                                    result: "failure",
+                                    error: e
                                 });
-                            },
-                            test.wait
-                        );
-                    }
-                    catch (e)
-                    {
-                        if (e instanceof RS.AssertionError)
-                        {
-                            setTimeout(
-                                function() 
-                                {
-                                    var t = test;
-                                    RS.bus.trigger(
-                                        "ROCKET.TestSuite.run.result.failure", 
-                                        {
-                                            suite: self,
-                                            case: test,
-                                            error: e
-                                        }
-                                    );
-                                    self.failures += 1;
-                                    self.results.push({
-                                        case: test,
-                                        result: "failure",
+                            }
+                            else
+                            {
+                                RS.bus.trigger(
+                                    "ROCKET.TestSuite.run.result.error", 
+                                    {
+                                        testSuite: self,
+                                        testCase: test,
                                         error: e
-                                    });
-                                },
-                                test.wait
-                            );
+                                    }
+                                );
+                                self.errors += 1;
+                                self.results.push({
+                                    testCase: test,
+                                    result: "error",
+                                    error: e
+                                });
+                            }
+                            return;
                         }
-                        else
+                        RS.bus.trigger(
+                            "ROCKET.TestSuite.run.result.success", 
+                            {
+                                testSuite: self,
+                                testCase: test
+                            }
+                        );
+                        self.successes += 1;
+                        self.results.push({
+                            testCase: test,
+                            result: "success"
+                        });
+                    },
+                    test.wait
+                );
+            }
+            catch (e)
+            {
+                if (e instanceof RS.AssertionError)
+                {
+                    setTimeout(
+                        function() 
                         {
-                            setTimeout(
-                                function()
+                            var t = test;
+                            RS.bus.trigger(
+                                "ROCKET.TestSuite.run.result.failure", 
                                 {
-                                    var t = test;
-                                    RS.bus.trigger(
-                                        "ROCKET.TestSuite.run.result.error", 
-                                        {
-                                            suite: self,
-                                            case: test,
-                                            error: e
-                                        }
-                                    );
-                                    self.errors += 1;
-                                    self.results.push({
-                                        case: test,
-                                        result: "error",
-                                        error: e
-                                    });
-                                },
-                                test.wait
+                                    testSuite: self,
+                                    testCase: test,
+                                    error: e
+                                }
                             );
-                        };
-                    }
+                            self.failures += 1;
+                            self.results.push({
+                                testCase: test,
+                                result: "failure",
+                                error: e
+                            });
+                        },
+                        test.wait
+                    );
                 }
-            )();
+                else
+                {
+                    setTimeout(
+                        function()
+                        {
+                            var t = test;
+                            RS.bus.trigger(
+                                "ROCKET.TestSuite.run.result.error", 
+                                {
+                                    testSuite: self,
+                                    testCase: test,
+                                    error: e
+                                }
+                            );
+                            self.errors += 1;
+                            self.results.push({
+                                testCase: test,
+                                result: "error",
+                                error: e
+                            });
+                        },
+                        test.wait
+                    );
+                }
+            }
+        };
+        for (i = 0; i < len; ++i)
+        {
+            fn(i);
         }
     };
 
@@ -297,7 +294,6 @@ var ROCKET = ( function( console, exports, Squiddle )
         RS.bus.trigger("ROCKET.TestLab.run.start", this, false);
         for (i = 0, len = suites.length; i < len; ++i)
         {
-            failed = 0;
             cur = suites[i];
             cur.run();
             suitesById[cur.id] = true;
@@ -361,9 +357,7 @@ var ROCKET = ( function( console, exports, Squiddle )
     RS.monitors.Console.prototype.onLabEnd = function(data, info)
     {
         console.log(" ");
-        var msg = (data.failures < 1) 
-            ? "SUCCEEDED! :)" 
-            : "FAILED!!! :(";
+        var msg = (data.failures < 1) ? "SUCCEEDED! :)" : "FAILED!!! :(";
         console.log("======================================================================");
         console.log("== TestLab Result for '" + data.name + "':");
         console.log("== " + msg);
@@ -376,9 +370,7 @@ var ROCKET = ( function( console, exports, Squiddle )
     RS.monitors.Console.prototype.onSuiteEnd = function(data, info)
     {
         console.log(" ");
-        var msg = (data.errors < 1 && data.failures < 1) 
-            ? "ALL TESTS SUCCEEDED! :)" 
-            : "TESTS FAILED!!! :(";
+        var msg = (data.errors < 1 && data.failures < 1) ? "ALL TESTS SUCCEEDED! :)" : "TESTS FAILED!!! :(";
         console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         console.log("~~ TestSuite Result for '" + data.name + "':");
         console.log("~~ " + msg);
@@ -392,7 +384,7 @@ var ROCKET = ( function( console, exports, Squiddle )
     {
         console.log(" ");
         console.warn(
-            "[FAILURE!] TestCase '" + data.case.name + "' failed!. " + 
+            "[FAILURE!] TestCase '" + data.testCase.name + "' failed!. " + 
             "Reason: " + data.error.message
         );
     };
@@ -401,7 +393,7 @@ var ROCKET = ( function( console, exports, Squiddle )
     {
         console.log(" ");
         console.error(
-            "[ERROR!!!] TestCase '" + data.case.name + "' failed!. " + 
+            "[ERROR!!!] TestCase '" + data.testCase.name + "' failed!. " + 
             "Error: " + data.error.message
         );
     };
@@ -445,7 +437,7 @@ var ROCKET = ( function( console, exports, Squiddle )
         var lab = document.createElement("div"),
             list = document.createElement("ul"),
             labContainer, suiteContainer, labResultsElement, suiteResultsElement,
-            fn,
+            fn, caseContainer,
             i, j, il, jl, cur, curCase,
             cases = {},
             suiteElement, suiteList, caseElement;
@@ -491,7 +483,7 @@ var ROCKET = ( function( console, exports, Squiddle )
             labContainer.list.appendChild(suiteElement);
             suiteContainer = 
             {
-                suite: cur,
+                testSuite: cur,
                 element: suiteElement,
                 list: suiteList,
                 results: suiteResultsElement,
@@ -518,7 +510,7 @@ var ROCKET = ( function( console, exports, Squiddle )
                 caseContainer = 
                 {
                     lab: labContainer,
-                    suite: suiteContainer,
+                    testSuite: suiteContainer,
                     test: curCase,
                     element: caseElement,
                     id: curCase.id
@@ -531,12 +523,8 @@ var ROCKET = ( function( console, exports, Squiddle )
     RS.monitors.HTML.prototype.onLabEnd = function(data, info)
     {
         var labContainer = this.labs[data.id];
-        var msg = (data.failures < 1) 
-            ? "SUCCESS!" 
-            : "FAILURE!";
-        var className = (data.failures < 1) 
-            ? "success" 
-            : "failure";
+        var msg = (data.failures < 1) ? "SUCCESS!" : "FAILURE!";
+        var className = (data.failures < 1) ? "success" : "failure";
         labContainer.results.innerHTML = '<span class="tag ' + className + 
             '">TestLab Result: ' + msg + '</span> ' +
             ' Failures: ' + data.failures + '; Successes: ' + data.successes;
@@ -554,13 +542,9 @@ var ROCKET = ( function( console, exports, Squiddle )
     {
         var suiteContainer = this.suites[data.id];
         var msg = 
-            (data.failures + data.errors < 1) 
-            ? "SUCCESS!" 
-            : "FAILURE!";
+            (data.failures + data.errors < 1) ? "SUCCESS!" : "FAILURE!";
         var className = 
-            (data.failures + data.errors < 1) 
-            ? "success" 
-            : "failure";
+            (data.failures + data.errors < 1) ? "success" : "failure";
         suiteContainer.results.innerHTML = '<span class="TestSuiteResultOverview ' + className + 
             '">TestSuite Result: ' + msg + '</span>' + 'Errors: ' + data.errors +
             '; Failures: ' + data.failures + '; Successes: ' + data.successes;
@@ -574,35 +558,35 @@ var ROCKET = ( function( console, exports, Squiddle )
 
     RS.monitors.HTML.prototype.onResultSuccess = function(data, info)
     {
-        var caseContainer = this.cases[data.case.id];
+        var caseContainer = this.cases[data.testCase.id];
         caseContainer.element.setAttribute(
             "class", 
             "" + caseContainer.element.getAttribute("class") + " success"
         );
-        caseContainer.element.innerHTML = 'TestCase "' + data.case.name + 
+        caseContainer.element.innerHTML = 'TestCase "' + data.testCase.name + 
             '": <span class="tag success">SUCCESS!</span>';
     };
 
     RS.monitors.HTML.prototype.onResultFailure = function(data, info)
     {
-        var caseContainer = this.cases[data.case.id];
+        var caseContainer = this.cases[data.testCase.id];
         caseContainer.element.setAttribute(
             "class", 
             "" + caseContainer.element.getAttribute("class") + " failure"
         );
-        caseContainer.element.innerHTML = 'TestCase "' + data.case.name + 
+        caseContainer.element.innerHTML = 'TestCase "' + data.testCase.name + 
         '": <span class="tag failure">FAILURE!</span>' +
         '<span class="details">Reason: ' + data.error.message + '</span>';
     };
 
     RS.monitors.HTML.prototype.onResultError = function(data, info)
     {
-        var caseContainer = this.cases[data.case.id];
+        var caseContainer = this.cases[data.testCase.id];
         caseContainer.element.setAttribute(
             "class", 
             "" + caseContainer.element.getAttribute("class") + " error"
         );
-        caseContainer.element.innerHTML = 'TestCase "' + data.case.name + 
+        caseContainer.element.innerHTML = 'TestCase "' + data.testCase.name + 
         '": <span class="tag error">ERROR!</span>' +
         '<span class="details">Error: ' + data.error.message + '</span>';
     };
@@ -638,11 +622,10 @@ var ROCKET = ( function( console, exports, Squiddle )
     
     for (key in RS)
     {
-        if ( !( RS.hasOwnProperty(key) ) )
+        if ( RS.hasOwnProperty(key) )
         {
-            continue;
+            exports[key] = RS[key];
         }
-        exports[key] = RS[key];
     }
     
     return RS;
