@@ -28,6 +28,9 @@ It works in both browser environments and on the server (node.js).
 
 ## Installation ##
 
+
+### Browser ###
+
 Grab the latest version from the download section on GitHub:
 [RocketScience.js on GitHub](https://github.com/jsteinbeck/RocketScience.js/downloads "Download RocketScience.js here.")
 
@@ -35,12 +38,16 @@ Extract the archive in a directory of your choice. If you only want to use Rocke
 the browser, that's it for the installation.
 
 
-### On Node.js ###
+### Node.js ###
 
-For node you can install the "rocketscience" package globally by changing to the directory
-where you extracted the archive and running:
 
-    sudo npm install -g
+You can install RocketScience with npm:
+
+    npm install rocketscience
+
+Or you can download the package (see the browser section above), extract it, go to it's directory and do:
+
+    npm install
 
 Then in node files, you can do:
 
@@ -48,7 +55,7 @@ Then in node files, you can do:
 var ROCKET = require("rocketscience");
 ```
 
-Or you can skip the install and use it like this:
+Or you can skip the install and use the downloaded version like this:
 
 ```javascript
 var ROCKET = require("./path/to/RocketScience.js/RocketScience.js");
