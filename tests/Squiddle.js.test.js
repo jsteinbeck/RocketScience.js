@@ -1,7 +1,7 @@
 var squiddleTest = ( function( ROCKET, Squiddle, exports )
 {
         var lab, suite, suite2, suite3, sq,
-            case1, case2, case3, case4, case5, case6, case3_1, case3_2;
+            case1, case2, case3, case4, case5, case6, case7, case3_1, case3_2;
             
         exports = exports || {};
         
@@ -114,11 +114,61 @@ var squiddleTest = ( function( ROCKET, Squiddle, exports )
                 wait: 20
             }
         );
+        
+        case7 = new ROCKET.TestCase(
+            "A squiddle instance can be injected into objects.",
+            function (params)
+            {
+                var fn;
+                
+                Squiddle.inject(params);
+                
+                fn = function (data) 
+                { 
+                    params.secret = data;
+                };
+                
+                params.subscribe(fn, "squiddle_test_case7");
+                params.trigger("squiddle_test_case7", "this is a secret");
+            },
+            function (params)
+            {
+                this.assertEquals(
+                    params.secret, "this is a secret", 
+                    "Listener didn't receive the expected data."
+                );
+                
+                this.assert(
+                    params.squiddle !== null,
+                    "Object does not contain a squiddle property."
+                );
+                
+                this.assert(
+                    params.squiddle instanceof sq.constructor,
+                    "Object does not contain a squiddle instance."
+                );
+                
+                this.assert(
+                    typeof params.unsubscribe === "function",
+                    "Object does not have an unsubscribe method."
+                );
+                
+                this.assert(
+                    typeof params.trigger === "function",
+                    "Object does not have a trigger method."
+                );
+            },
+            {
+                init: function () { return { secret: "" }; },
+                                    wait: 20
+            }
+        );
 
         suite.addTestCase(case1);
         suite.addTestCase(case2);
         suite.addTestCase(case3);
         suite.addTestCase(case6);
+        suite.addTestCase(case7);
         lab.addTestSuite(suite);
         
         
